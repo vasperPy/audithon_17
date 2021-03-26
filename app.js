@@ -8,7 +8,7 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const port = process.env.port || 3000;
+const port = process.env.PORT || 3000;
 
 const global_params = {
   uuid: "37772227-baa6-4e06-88d8-e9e6b3303ee2",
