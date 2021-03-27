@@ -125,14 +125,13 @@ function getMeasuresData(
 }
 
 app.get("/", (req, res) => {
-  if(req.params.territory)
-  console.log(req.params.territory);
-  getMeasuresData((data) => {
-    res.render("index", {measures: data});
+  getTerritoryData((territories) => {
+    console.log(territories);
+    getMeasuresData((data) => {
+      res.render("index", { measures: data, territories: territories });
+    }, req.query.territory || -1);
   });
 });
-
-
 
 app.listen(port, () => {
   console.log(`Server started at port ${port}`);
