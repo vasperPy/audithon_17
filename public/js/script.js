@@ -2,21 +2,6 @@ const $leftLinks = document.querySelectorAll(".left-menu a"),
   $mapLinks = document.querySelectorAll(".map a *"),
   $info = document.querySelector(".info");
 
-const requestData = (id = 1) => {
-  fetch("js/data.json")
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      $info.innerHTML = `
-			<h2>${data[id - 1].district}</h2>
-			<p>${data[id - 1].info}</p>
-		`;
-    });
-};
-
-//requestData();
-
 $leftLinks.forEach((el) => {
   el.addEventListener("mouseenter", (e) => {
     let self = e.currentTarget;
@@ -77,8 +62,8 @@ $mapLinks.forEach((el) => {
     let self = e.currentTarget;
     let parent = self.parentNode;
     let selfClass = parent.getAttribute("href");
-    if(!isNaN(self.id))
-      window.location.href = `/?territory=${self.id}`
-    console.log(self.id);
+    if (!isNaN(self.id)) {
+      window.location.href = `/?territory=${self.id}#stats`
+    }
   });
 });

@@ -1,7 +1,7 @@
 <%- include('partials/header') %>
 <div class="container">
   <div class="row mt-4">
-    <div class="left-menu col-3">
+    <!-- <div class="left-menu col-3">
       <ul class="list-group">
         <li class="list-group-item">
           <a
@@ -69,8 +69,8 @@
           </a>
         </li>
       </ul>
-    </div>
-    <div class="map col-9">
+    </div> -->
+    <div class="map col-12">
       <svg
         id="svg2"
         xmlns="http://www.w3.org/2000/svg"
@@ -1034,9 +1034,9 @@
   </div>
 </div>
 <div class="container-fluid px-5 mt-5">
-	<div class="row">
-		<!-- <h2>Название округа</h2>
-		<p>Описание округа</p> -->
+	<div class="row" id="stats">
+    <p>Число малоимущих:</p>
+    <div id="main" style="width:100%; height:500px;"></div>
 		<div class="col-12">
 			<table class="table table-hover table-bordered">
 				<thead>
@@ -1047,17 +1047,19 @@
 					  <th scope="col" class="text-center align-middle">Получателей, чел.</th>
 					  <th scope="col" class="text-center align-middle">Размер среднего значения, руб.</th>
 					  <th scope="col" class="text-center align-middle">Всего сумма назначений МСЗ(П), руб.</th>
+            <th scope="col" class="text-center align-middle">Дата</th>
 					</tr>
 				</thead>
 				<tbody id="measures-data">
 					<% measures.forEach(m => { %>
 					<tr>
-						<td><%= m[0] %> </td>
-						<td><%= m[1] %> </td>
-						<td><%= m[2] %> </td>
-						<td><%= m[3] %> </td>
-						<td><%= Math.round(m[4]) %> </td>
-						<td><%= Math.round(m[5]) %> </td>
+						<td><%= m.name %> </td>
+						<td><%= m.code %></td>
+						<td><%= m.appointment %> </td>
+						<td><%= m.recipients %> </td>
+						<td><%= m.average %> </td>
+						<td><%= m.sum %> </td>
+            <td><%= new Date(m.date).toLocaleDateString().slice(3,10) %> </td>
 					</tr>
 					<% }); %> 
 				</tbody>
@@ -1065,5 +1067,64 @@
 		</div>
 	  </div>
 </div>
+<script src="/js/echarts.min.js"></script>
+<script>
+  var chartDom = document.getElementById('main');
+var myChart = echarts.init(chartDom);
+var option;
 
+option = {
+    toolbox: {
+        feature: {
+            dataView: {show: true, readOnly: false},
+            magicType: {show: true, type: ['line', 'bar']},
+            restore: {show: true},
+            saveAsImage: {show: true}
+        }
+    },  
+    tooltip: {
+        trigger: 'axis', 
+    },
+    xAxis: {
+        type: 'category',
+        data: <%- JSON.stringify(needyCnt.date) %>
+    },
+    yAxis: {
+        type: 'value'
+    },
+    series: [
+      <% if(pay0409[0] != 0) { %>
+        {
+          name: 'pay0409',
+          type: 'bar',
+          stack: 'one',
+          data: <%- JSON.stringify(pay0409.slice(1)) %>
+        },
+      <% }; %>
+      <% if(pay0428[0] != 0) { %>
+        {
+          name: 'pay0428',
+          type: 'bar',
+          stack: 'one',
+          data: <%- JSON.stringify(pay0428.slice(1)) %>
+        },
+      <% }; %>
+      <% if(pay0429[0] != 0) { %>
+        {
+          name: 'pay0429',
+          type: 'bar',
+          stack: 'one',
+          data: <%- JSON.stringify(pay0429.slice(1)) %>
+        },
+      <% }; %>
+      {
+        name: 'Количество малоимущих',
+        data: <%- JSON.stringify(needyCnt.cnt) %>,
+        type: 'line',
+        smooth: true
+    }]
+};
+
+option && myChart.setOption(option);
+</script>
 <%- include('partials/footer') %>
