@@ -2,6 +2,10 @@ const $leftLinks = document.querySelectorAll(".left-menu a"),
   $mapLinks = document.querySelectorAll(".map a *"),
   $info = document.querySelector(".info");
 
+  $(function () {
+    $('[data-toggle="popover"]').popover()
+  })
+
 $leftLinks.forEach((el) => {
   el.addEventListener("mouseenter", (e) => {
     let self = e.currentTarget;
@@ -43,7 +47,7 @@ $mapLinks.forEach((el) => {
     let currentElement = document.querySelector(
       `.left-menu a[href="${selfClass}"]`
     );
-    currentElement.parentNode.classList.add("active");
+    //currentElement.parentNode.classList.add("active");
   });
 
   el.addEventListener("mouseleave", (e) => {
@@ -54,7 +58,7 @@ $mapLinks.forEach((el) => {
     let currentElement = document.querySelector(
       `.left-menu a[href="${selfClass}"]`
     );
-    currentElement.parentNode.classList.remove("active");
+    //currentElement.parentNode.classList.remove("active");
   });
 
   el.addEventListener("click", (e) => {
